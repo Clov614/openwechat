@@ -162,16 +162,11 @@ func (m *Message) IsSendByGroup() bool {
 	return strings.HasPrefix(m.FromUserName, "@@") || (m.IsSendBySelf() && strings.HasPrefix(m.ToUserName, "@@"))
 }
 
-// IsSelfSendToGroup 判断消息是否由自己发送到群组
-func (m *Message) IsSelfSendToGroup() bool {
-	return m.IsSendBySelf() && strings.HasPrefix(m.ToUserName, "@@")
-}
-
 // ReplyText 回复文本消息
 func (m *Message) ReplyText(content string) (*SentMessage, error) {
 	// 判断是否由自己发送
 	username := m.FromUserName
-	if m.IsSelfSendToGroup() {
+	if m.IsSendBySelf() {
 		username = m.ToUserName
 	}
 	return m.Owner().sendTextToUser(username, content)
@@ -181,7 +176,7 @@ func (m *Message) ReplyText(content string) (*SentMessage, error) {
 func (m *Message) ReplyEmoticon(md5 string, file io.Reader) (*SentMessage, error) {
 	// 判断是否由自己发送
 	username := m.FromUserName
-	if m.IsSelfSendToGroup() {
+	if m.IsSendBySelf() {
 		username = m.ToUserName
 	}
 	return m.Owner().sendEmoticonToUser(username, md5, file)
@@ -191,7 +186,7 @@ func (m *Message) ReplyEmoticon(md5 string, file io.Reader) (*SentMessage, error
 func (m *Message) ReplyImage(file io.Reader) (*SentMessage, error) {
 	// 判断是否由自己发送
 	username := m.FromUserName
-	if m.IsSelfSendToGroup() {
+	if m.IsSendBySelf() {
 		username = m.ToUserName
 	}
 	return m.Owner().sendImageToUser(username, file)
@@ -201,7 +196,7 @@ func (m *Message) ReplyImage(file io.Reader) (*SentMessage, error) {
 func (m *Message) ReplyVideo(file io.Reader) (*SentMessage, error) {
 	// 判断是否由自己发送
 	username := m.FromUserName
-	if m.IsSelfSendToGroup() {
+	if m.IsSendBySelf() {
 		username = m.ToUserName
 	}
 	return m.Owner().sendVideoToUser(username, file)
@@ -211,7 +206,7 @@ func (m *Message) ReplyVideo(file io.Reader) (*SentMessage, error) {
 func (m *Message) ReplyFile(file io.Reader) (*SentMessage, error) {
 	// 判断是否由自己发送
 	username := m.FromUserName
-	if m.IsSelfSendToGroup() {
+	if m.IsSendBySelf() {
 		username = m.ToUserName
 	}
 	return m.Owner().sendFileToUser(username, file)
